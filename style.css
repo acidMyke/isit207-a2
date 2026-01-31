@@ -1,0 +1,144 @@
+:root {
+  --color-bg: hsl(221, 83%, 98%);
+  --color-border: hsl(221, 83%, 90%);
+  --color-border-alt: hsla(221, 83%, 20%, 0.2);
+
+  --color-primary: hsl(221, 83%, 53%);
+  --color-primary-hover: hsl(221, 83%, 47%);
+  --color-text-primary: hsl(221, 83%, 24%);
+
+  --color-secondary: hsl(262, 83%, 58%);
+  --color-secondary-hover: hsl(262, 83%, 50%);
+  --color-text-secondary: hsl(262, 83%, 34%);
+
+  --color-accent: #935af6;
+
+  --color-surface: white;
+  --color-surface-alt: hsl(221, 83%, 96%);
+
+  --color-text-muted: hsl(221, 24%, 65%);
+  --color-text-inverse: white;
+
+  --color-success: hsl(142, 83%, 38%);
+  --color-warning: hsl(38, 83%, 48%);
+  --color-danger: hsl(0, 83%, 54%);
+
+  --transition-timing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text-primary);
+}
+
+.site-header {
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  max-width: 1200px;
+  margin: auto;
+}
+
+#logo img {
+  height: 36px;
+  width: auto;
+}
+
+#nav-toggle {
+  display: none;
+}
+
+.hamburger {
+  cursor: pointer;
+}
+
+#menu {
+  position: absolute;
+  top: 64px;
+  left: 0;
+  right: 0;
+  background: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  display: none;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 0.75rem;
+  list-style: none;
+
+  a {
+    transition: background 150ms var(--transition-timing);
+    pointer-events: all;
+    text-decoration: none;
+    color: var(--color-text-primary);
+    font-weight: 500;
+    padding: 0.5rem;
+    border-radius: 6px;
+
+    &:hover {
+      background: var(--color-primary);
+      color: var(--color-text-inverse);
+    }
+
+    &.active {
+      background: var(--color-primary);
+      color: var(--color-text-inverse);
+    }
+  }
+}
+
+#nav-toggle:checked ~ #menu {
+  display: flex;
+}
+
+@media (min-width: 768px) {
+  .nav {
+    padding: 1rem 1.5rem;
+  }
+
+  .hamburger {
+    display: none;
+  }
+
+  #menu {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: none;
+    padding: 0;
+    gap: 1.5rem;
+    pointer-events: none;
+  }
+
+  /* .active a {
+    background: var(--color-primary);
+    color: var(--color-text-inverse);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    width: 100%;
+
+    &:hover {
+      background: var(--color-primary-hover);
+    }
+  } */
+}
+
+@supports (view-transition-name: none) {
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.3s;
+  }
+}
