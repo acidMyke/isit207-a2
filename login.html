@@ -24,6 +24,7 @@
       href="/images/favicon-16x16.png"
     />
     <link rel="manifest" href="/site.webmanifest" />
+    <script defer src="/main.js"></script>
   </head>
   <body>
     <header class="site-header">
@@ -65,13 +66,13 @@
           <h1>Welcome back</h1>
         </div>
 
-        <form style="display: grid; gap: 1.25rem;">
+        <form style="display: grid; gap: 1.25rem;" onsubmit="processLogin(event)">
           <div class="formfield">
-            <label for="email">Email</label>
+            <label for="namail">Name/Email</label>
             <input
-              id="email"
-              type="email"
-              placeholder="you@example.com"
+              id="namail"
+              name="namail"
+              placeholder="you/you@example.com"
               required
             />
             <p>Please include an '@' in the email address!</p>
@@ -82,6 +83,7 @@
             <input
               id="password"
               type="password"
+              name="password"
               placeholder="••••••••"
               required
               minlength="8"
