@@ -26,6 +26,13 @@
     place-items: center;
     text-align: center;
 
+    border-top: 10px solid;
+    border-image: linear-gradient(
+      to right,
+      var(--color-primary),
+      var(--color-accent)
+    ) 1;
+
     @media (min-width: 1024px) {
       grid-row: 1 / 4;
       padding: 2rem;
