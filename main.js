@@ -3,13 +3,14 @@
  * @property {String} name
  * @property {String} email
  * @property {String} password
+ * @property {number?} loginMs
  */
 
 /** @type {Account[]} */
-const accounts = [];
+let accounts = [];
 
 /** @type {Account | null} */
-const currentAccount = null;
+let currentAccount = null;
 
 function setFormStatus(status, type = 'error', el) {
   /** @type {HTMLDivElement | null} */
@@ -40,6 +41,7 @@ function setFormStatus(status, type = 'error', el) {
 /** @param {Account} */
 function setCurrentAccount(account) {
   currentAccount = account;
+  saveToLocalStorage();
 }
 
 function redirectAfterLogin() {}
@@ -105,15 +107,47 @@ function processSignUp(event) {
   redirectAfterLogin();
 }
 
+/**
+ *
+ * @param {MouseEvent} event
+ */
+function processLogout(event) {
+  event.preventDefault();
+  currentAccount = null;
+  saveToLocalStorage();
+}
+
+function initFromLocalStorage() {
+  const dynamicDataJson = localStorage.getItem('dynamicData');
+  if (!dynamicDataJson) return;
+  try {
+    const dynamicData = JSON.parse(dynamicDataJson);
+    console.log('dynamicData', dynamicData);
+    accounts = dynamicData.accounts;
+    if (
+      dynamicData.currentAccount &&
+      dynamicData.currentAccount.loginMs + 600_000 > new Date().getTime()
+    ) {
+      currentAccount = dynamicData.currentAccount;
+    }
+  } catch {}
+}
+
+function saveToLocalStorage() {
+  currentAccount.loginMs = new Date().getTime();
+  const dynamicData = { accounts, currentAccount };
+  localStorage.setItem('dynamicData', JSON.stringify(dynamicData));
+}
+
 class AppNavCompoenent extends HTMLElement {
   constructor() {
     super();
     const shadowRoot = this.attachShadow({ mode: 'open' });
     shadowRoot.innerHTML = `
     <link rel="stylesheet" href="/common.css" />
-    <header class="site-header">
+        <header class="site-header">
       <nav class="nav">
-        <a href="index.html" id="logo" style="view-transition-name: logo">
+        <a href="index.html" id="logo">
           <img src="/images/logo.webp" alt="Car Rental Logo" />
         </a>
 
@@ -137,16 +171,25 @@ class AppNavCompoenent extends HTMLElement {
           </svg>
         </label>
 
-        <ul id="menu" style="view-transition-name: nav">
-          <li id="nav-home"><a href="index.html">Home</a></li>
-          <li id="nav-about"><a href="about.html">About Us</a></li>
-          <li id="nav-auth"><a href="login.html">Login</a></li>
+        <ul id="menu" data-isLoggedIn="false">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li class="publiconly"><a href="login.html">Login</a></li>
+          <li class="publiconly"><a href="sign-up.html">Sign Up</a></li>
+          <li class="loginonly"><a href="history.html">History</a></li>
+          <li class="loginonly"><a href="return.html">Return</a></li>
+          <li class="loginonly"><a href="#" onclick="processLogout(event)">Log out</a></li>
         </ul>
       </nav>
     </header>`;
   }
 
   connectedCallback() {
+    initFromLocalStorage();
+    if (currentAccount) {
+      const menuEl = this.shadowRoot.getElementById('menu');
+      menuEl?.setAttribute('data-isLoggedIn', 'true');
+    }
     const currentPath =
       window.location.pathname.split('/').pop() || 'index.html';
 
