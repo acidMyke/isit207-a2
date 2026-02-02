@@ -1,4 +1,35 @@
+#cringe-greeting {
+  background-image: url('/images/thumbs-up-scaled.png');
+  min-height: 720px;
+  max-width: 1440px;
+  background-repeat: no-repeat;
+  background-size: cover;
+  
+  @media (max-width: 720px) {
+    background-position: calc((720px - 100vw) / 712px * -16rem);
+  }
+
+  margin: 0px auto;
+  display: grid;
+  gridtem
+  
+
+
+  & > div {
+    display: grid;
+  }
+
+  button {
+    @media (min-width: 720px) {
+      width: 16rem;
+      height: 8rem;
+      font-size: 2.2rem;
+    }
+  }
+}
+
 #whyyyyyyyyyy {
+  margin-top: 1rem;
   display: grid;
   grid-template-columns: 1fr;
   row-gap: 1rem;
@@ -28,10 +59,11 @@
 
     border-top: 10px solid;
     border-image: linear-gradient(
-      to right,
-      var(--color-primary),
-      var(--color-accent)
-    ) 1;
+        to right,
+        var(--color-primary),
+        var(--color-accent)
+      )
+      1;
 
     @media (min-width: 1024px) {
       grid-row: 1 / 4;
