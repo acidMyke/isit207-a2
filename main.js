@@ -1,10 +1,38 @@
 /**
  * @typedef {Object} Account
- * @property {String} name
- * @property {String} email
- * @property {String} password
+ * @property {string} name
+ * @property {string} email
+ * @property {string} password
  * @property {number?} loginMs
  */
+
+/**
+ * @typedef {Object} Car
+ * @property {string} brand
+ * @property {string} model
+ * @property {string} price
+ * @property {string} imagePath
+ */
+
+/** @type {Car[]} */
+let cars = [
+  {
+    id: 0,
+    make: 'BMW',
+    model: '3 Series',
+    price: 333,
+    image: 'images/cars/00-3series.webp',
+    qty: 3,
+  },
+  {
+    id: 0,
+    make: 'Audi',
+    model: 'A4',
+    price: 200,
+    image: 'images/cars/01-a4.webp',
+    qty: 4,
+  },
+];
 
 /** @type {Account[]} */
 let accounts = [];
@@ -133,6 +161,13 @@ function initFromLocalStorage() {
     console.log('dynamicData', dynamicData);
     accounts = dynamicData.accounts;
     if (
+      dynamicData.cars &&
+      Array.isArray(dynamicData.cars) &&
+      dynamicData.cars.length
+    ) {
+      cars = dynamicData.cars;
+    }
+    if (
       dynamicData.currentAccount &&
       dynamicData.currentAccount.loginMs + 600_000 > new Date().getTime()
     ) {
@@ -145,7 +180,7 @@ function saveToLocalStorage() {
   if (currentAccount) {
     currentAccount.loginMs = new Date().getTime();
   }
-  const dynamicData = { accounts, currentAccount };
+  const dynamicData = { accounts, currentAccount, cars };
   localStorage.setItem('dynamicData', JSON.stringify(dynamicData));
 }
 
@@ -186,7 +221,7 @@ class AppNavCompoenent extends HTMLElement {
           <li><a href="about.html">About Us</a></li>
           <li class="publiconly"><a href="login.html">Login</a></li>
           <li class="publiconly"><a href="sign-up.html">Sign Up</a></li>
-          <li class="loginonly"><a href="reserve.html">Reserve</a></li>
+          <li class="loginonly"><a href="booking.html">Booking</a></li>
           <li class="loginonly"><a href="history.html">History</a></li>
           <li class="loginonly"><a href="return.html">Return</a></li>
           <li class="loginonly"><a href="#" onclick="processLogout(event)">Log out</a></li>
