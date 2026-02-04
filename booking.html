@@ -30,7 +30,10 @@
     <app-nav></app-nav>
     <main>
       <h1>Booking Page</h1>
-      <form onsubmit="processBooking(event)">
+      <form
+        onsubmit="processBooking(event)"
+        onchange="onBookingDetailChange(event)"
+      >
         <div class="accordion">
           <input
             type="radio"
@@ -38,25 +41,35 @@
             name="accordion-control"
             checked="checked"
           />
-          <div class="accordion-title">Step1: Select account</div>
+          <div class="accordion-title">Step 1: Select vehicle</div>
           <div class="accordion-content">
-            Testing the overly complicated accordion
-
-            <label for="accSection1" class="block btn-primary"> Next </label>
+            <section id="vehicleSelection">
+              <input type="radio" name="" id="">
+              <input type="radio" name="" id="">
+              <input type="radio" name="" id="">
+              <label for="accSection1" class="block btn-primary"> Next </label>
+            </section>
           </div>
         </div>
         <div class="accordion">
           <input type="radio" id="accSection1" name="accordion-control" />
-          <div class="accordion-title">Step1: Select vehicle</div>
+          <div class="accordion-title">Step 2: Select date</div>
           <div class="accordion-content">
-            Testing the overly complicated accordion for section 2
-
-            <label for="accSection0" class="block btn-primary"> Back </label>
-            <label for="accSection2" class="block btn-primary"> Next </label>
+            <section id="dateSelection">
+              <label for="accSection0" class="block btn-primary"> Back </label>
+              <label for="accSection2" class="block btn-primary"> Next </label>
+            </section>
           </div>
         </div>
         <div class="accordion">
-          <input type="radio" id="accSection2" name="accordion-control" />
+          <input type="radio" id="accSection1" name="accordion-control" />
+          <div class="accordion-title">Step 3: Confirmation & Checkout</div>
+          <div class="accordion-content">
+            <section id="dateSelection">
+              <label for="accSection0" class="block btn-primary"> Back </label>
+              <label for="accSection2" class="block btn-primary"> Next </label>
+            </section>
+          </div>
         </div>
       </form>
     </main>

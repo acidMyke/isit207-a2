@@ -259,3 +259,15 @@ class AppNavCompoenent extends HTMLElement {
 }
 
 customElements.define('app-nav', AppNavCompoenent);
+
+/** @param {Event} event */
+function onBookingDetailChange(event) {
+  const { target } = event;
+  const targetName = target?.getAttribute('name');
+
+  if (!targetName || targetName === 'accordion-control') {
+    return;
+  }
+
+  console.log(targetName);
+}
