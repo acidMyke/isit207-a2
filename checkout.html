@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AZoom</title>
+    <link rel="stylesheet" href="/common.css" />
+    <link rel="stylesheet" href="/checkout.css" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script defer src="/main.js"></script>
+  </head>
+  <body>
+    <app-nav></app-nav>
+    <main>
+      <h1 class="publiconly">Please login first!!</h1>
+      <h1 class="loginonly">Checkout</h1>
+      <div class="loginonly">
+        <form onsubmit="processBooking(event)">
+          <img id="carImage" />
+          <input type="hidden" name="carid" />
+          <div class="formfield">
+            <label for="from">From</label>
+            <input id="from" name="rentFrom" type="datetime-local" required />
+            <p>Please select a valid start date</p>
+          </div>
+
+          <div class="formfield">
+            <label for="to">To</label>
+            <input id="to" name="rentTo" type="datetime-local" required />
+            <p>Please select a valid end date</p>
+          </div>
+          <div class="formfield">
+            <label for="cc-number">Card number</label>
+            <input
+              id="cc-number"
+              name="cc"
+              type="text"
+              inputmode="numeric"
+              placeholder="1234567890123456"
+              pattern="[0-9]{16}"
+              maxlength="16"
+              minlength="16"
+              required
+            />
+            <p>Please enter a valid credit card number</p>
+          </div>
+          <div class="formfield">
+            <label>Expiry date</label>
+            <input
+              type="text"
+              inputmode="numeric"
+              placeholder="MM/YY"
+              maxlength="5"
+              minlength="5"
+              pattern="\d\d/\d\d"
+              required
+            />
+            <p>Invalid expiry date</p>
+          </div>
+
+          <div class="formfield">
+            <label for="cvc">CVC</label>
+            <input
+              id="cvc"
+              type="text"
+              inputmode="numeric"
+              maxlength="4"
+              placeholder="123"
+              required
+            />
+            <p>Invalid CVC</p>
+          </div>
+          <div class="formStatus"></div>
+          <button class="btn-action-gradient" type="submit">Checkout</button>
+        </form>
+      </div>
+    </main>
+  </body>
+</html>

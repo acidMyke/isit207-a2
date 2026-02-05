@@ -222,6 +222,7 @@ function initFromLocalStorage() {
     }
   } catch {}
   renderCarGrid();
+  initializeCarCheckout();
 }
 
 function saveToLocalStorage() {
@@ -329,8 +330,20 @@ function renderCarGrid() {
       <img src="${imagePath}" alt="${brand} ${model}">
       <h3>${brand} ${model}</h3>
       <p>SGD ${price} per day</p>
-      <a class="btn-primary" href="/checkout?id=${id}">Select!</a>`;
+      <a class="btn-primary" href="/checkout.html?carid=${id}">Select!</a>`;
     carOptionEl.setAttribute('data-qty', qty.toString());
     carGrid?.appendChild(carOptionEl);
+  }
+}
+
+function initializeCarCheckout() {
+  if (location.pathname !== '/checkout.html') {
+    return;
+  }
+  const params = new URLSearchParams(location.search);
+  const carid = params.get('carid');
+  console.log({ carid });
+  if (!carid) {
+    location.href = '/booking.html';
   }
 }
