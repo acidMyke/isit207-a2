@@ -2,6 +2,7 @@
 
 /**
  * @typedef {Object} Account
+ * @property {string} id
  * @property {string} name
  * @property {string} email
  * @property {string} password
@@ -194,7 +195,7 @@ function processSignUp(event) {
     }
   }
 
-  const acc = { name, email, password };
+  const acc = { id: accounts.length.toString(), name, email, password };
 
   accounts.push(acc);
   setCurrentAccount(acc);
@@ -219,15 +220,20 @@ function initFromLocalStorage() {
     /** @type {ReturnType<typeof saveToLocalStorage>} */
     const dynamicData = JSON.parse(dynamicDataJson);
     accounts = dynamicData.accounts;
-    if (
-      dynamicData.carQty &&
-      Array.isArray(dynamicData.carQty) &&
-      dynamicData.carQty.length
-    ) {
+    if (dynamicData.carQty) {
       for (const key in dynamicData.carQty) {
         carQty[key] = dynamicData.carQty[key];
       }
     }
+
+    if (
+      dynamicData.bookings &&
+      Array.isArray(dynamicData.bookings) &&
+      dynamicData.bookings.length
+    ) {
+      bookings = dynamicData.bookings;
+    }
+
     if (
       dynamicData.currentAccount &&
       dynamicData.currentAccount.loginMs &&
@@ -245,7 +251,7 @@ function saveToLocalStorage() {
   if (currentAccount) {
     currentAccount.loginMs = new Date().getTime();
   }
-  const dynamicData = { accounts, currentAccount, carQty };
+  const dynamicData = { accounts, currentAccount, carQty, bookings };
   localStorage.setItem('dynamicData', JSON.stringify(dynamicData));
   return dynamicData;
 }
@@ -381,6 +387,8 @@ const currencyFormatter = Intl.NumberFormat('en-SG', {
   currency: 'SGD',
 });
 
+const DAYS_MS = 86_400_000;
+
 function onCheckoutFormChange() {
   const checkoutform = /** @type {HTMLFormElement | null} */ (
     document.getElementById('checkoutform')
@@ -394,10 +402,13 @@ function onCheckoutFormChange() {
   }
 
   const rentFromEl = /** @type {HTMLInputElement} */ (
-    document.querySelector('input[name=rentFrom]')
+    document.querySelector('input[name="rentFrom"]')
   );
   const rentToEl = /** @type {HTMLInputElement} */ (
-    document.querySelector('input[name=rentTo]')
+    document.querySelector('input[name="rentTo"]')
+  );
+  const preCalcTotalEl = /** @type {HTMLInputElement} */ (
+    document.querySelector('input[name="preCalcTotal"]')
   );
   const now = new Date();
   rentFromEl.min = now.toISOString().slice(0, 10);
@@ -408,9 +419,8 @@ function onCheckoutFormChange() {
   const carIdStr = formData.get('carid');
   const rentFromStr = formData.get('rentFrom');
   const rentToStr = formData.get('rentTo');
-  const ccStr = formData.get('cc');
 
-  console.log({ carIdStr, rentFromStr, rentToStr, ccStr });
+  console.log({ carIdStr, rentFromStr, rentToStr });
 
   const carId = parseInt(carIdStr);
   const car = carListing.find(({ id }) => id === carId);
@@ -441,7 +451,9 @@ function onCheckoutFormChange() {
   if (rentFromStr) {
     rentFromDate = new Date(rentFromStr);
     if (!isNaN(rentFromDate.getTime())) {
-      rentToEl.min = rentFromDate.toISOString().slice(0, 10);
+      rentToEl.min = new Date(rentFromDate.getTime() + DAYS_MS)
+        .toISOString()
+        .slice(0, 10);
       appendLabelAndValue('From: ', dateFormatter.format(rentFromDate));
     }
   }
@@ -449,15 +461,16 @@ function onCheckoutFormChange() {
   if (rentToStr) {
     rentToDate = new Date(rentToStr);
     if (!isNaN(rentToDate.getTime())) {
-      rentFromEl.max = rentToDate.toISOString().slice(0, 10);
+      rentFromEl.max = new Date(rentToDate.getTime() - DAYS_MS)
+        .toISOString()
+        .slice(0, 10);
       appendLabelAndValue('To: ', dateFormatter.format(rentToDate));
     }
   }
 
   if (rentToDate && rentFromDate) {
     const msDiff = rentToDate.getTime() - rentFromDate.getTime();
-    const hoursDiff = msDiff / 3600_000;
-    const daysDiff = Math.ceil(hoursDiff / 24);
+    const daysDiff = Math.ceil(msDiff / DAYS_MS);
 
     appendLabelAndValue('Duration: ', `${daysDiff} days`);
 
@@ -469,5 +482,44 @@ function onCheckoutFormChange() {
     const grandTotal = subtotal + gst;
     appendLabelAndValue('GST: ', currencyFormatter.format(gst));
     appendLabelAndValue('Total: ', currencyFormatter.format(grandTotal));
+    preCalcTotalEl.value = grandTotal.toString();
   }
+}
+
+/**
+ *
+ * @param {SubmitEvent} event
+ */
+function processCheckout(event) {
+  if (!event || !event.target) return;
+  event.preventDefault();
+  const formData = new FormData(/** @type {HTMLFormElement} */ (event.target));
+  const carIdStr = formData.get('carid');
+  const rentFromStr = formData.get('rentFrom');
+  const rentToStr = formData.get('rentTo');
+  const ccStr = formData.get('cc');
+  const preCalcTotalStr = formData.get('preCalcTotal');
+
+  console.log({ carIdStr, rentFromStr, rentToStr, preCalcTotalStr });
+
+  const carId = parseInt(carIdStr);
+  const car = carListing.find(({ id }) => id === carId);
+
+  if (!car) {
+    return;
+  }
+
+  bookings.push({
+    userId: currentAccount?.id,
+    carId,
+    datetimeform: rentFromStr,
+    dateto: rentToStr,
+    last4cc: ccStr?.slice(12, 16),
+    total: parseFloat(preCalcTotalStr),
+  });
+
+  carQty[carId.toString().padStart(2, '0')] -= 1;
+  saveToLocalStorage();
+
+  location.replace('/history.html');
 }
