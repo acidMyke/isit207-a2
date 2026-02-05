@@ -15,7 +15,6 @@
  * @property {string} model
  * @property {number} price
  * @property {string} imagePath
- * @property {number} qty
  */
 
 /** @type {Car[]} */
@@ -26,17 +25,52 @@ let carListing = [
     model: '3 Series',
     price: 333,
     imagePath: 'images/cars/00-3series.webp',
-    qty: 3,
   },
   {
-    id: 0,
+    id: 1,
     brand: 'Audi',
     model: 'A4',
     price: 200,
     imagePath: 'images/cars/01-a4.webp',
-    qty: 4,
+  },
+  {
+    id: 2,
+    brand: 'Mercedes',
+    model: 'GLA',
+    price: 280,
+    imagePath: 'images/cars/02-m-gla.avif',
+  },
+  {
+    id: 3,
+    brand: 'Mercedes',
+    model: 'E Class',
+    price: 280,
+    imagePath: 'images/cars/03-m-eclass.webp',
+  },
+  {
+    id: 4,
+    brand: 'Mercedes',
+    model: 'GLC',
+    price: 280,
+    imagePath: 'images/cars/04-m-glc.webp',
+  },
+  {
+    id: 5,
+    brand: 'Mercedes',
+    model: 'GLE',
+    price: 280,
+    imagePath: 'images/cars/05-m-gle.avif',
   },
 ];
+
+let carQty = {
+  '00': 3,
+  '01': 4,
+  '02': 1,
+  '03': 1,
+  '04': 1,
+  '05': 1,
+};
 
 /** @type {Account[]} */
 let accounts = [];
@@ -166,11 +200,11 @@ function initFromLocalStorage() {
     console.log('dynamicData', dynamicData);
     accounts = dynamicData.accounts;
     if (
-      dynamicData.carListing &&
-      Array.isArray(dynamicData.carListing) &&
-      dynamicData.carListing.length
+      dynamicData.carQty &&
+      Array.isArray(dynamicData.carQty) &&
+      dynamicData.carQty.length
     ) {
-      carListing = dynamicData.carListing;
+      carQty = dynamicData.carQty;
     }
     if (
       dynamicData.currentAccount &&
@@ -187,7 +221,7 @@ function saveToLocalStorage() {
   if (currentAccount) {
     currentAccount.loginMs = new Date().getTime();
   }
-  const dynamicData = { accounts, currentAccount, carListing };
+  const dynamicData = { accounts, currentAccount, carQty };
   localStorage.setItem('dynamicData', JSON.stringify(dynamicData));
   return dynamicData;
 }
@@ -272,7 +306,8 @@ function renderCarGrid() {
   const carGrid = document.getElementById('car-grid');
   for (let car of carListing) {
     const carOptionEl = document.createElement('div');
-    const { id, brand, imagePath, model, price, qty } = car;
+    const { id, brand, imagePath, model, price } = car;
+    const qty = carQty[id.toString().padStart(2, '0')];
     carOptionEl.innerHTML = `
       <img src="${imagePath}" alt="${brand} ${model}">
       <h3>${brand} ${model}</h3>

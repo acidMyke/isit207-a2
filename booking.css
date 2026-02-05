@@ -17,20 +17,39 @@ main {
   display: flex;
   gap: 0.75rem;
   margin-top: 1rem;
+  flex-wrap: wrap;
 
   & > div {
-    width: 14rem;
+    width: 12rem;
+    height: 16rem;
     padding: 1rem;
     border: 1px solid var(--color-border-alt);
     border-radius: 1rem;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    display: flex;
+    flex-flow: column nowrap;
+    flex-grow: 1;
+
+    @media (min-width: 480px) {
+      width: 14rem;
+      height: 20rem;
+    }
 
     & > img {
+      max-height: 10rem;
       max-width: 100%;
+      margin-bottom: auto;
     }
 
     & > h3 {
-      font-size: 1.4rem;
+      margin-top: auto;
+      font-size: 1.2rem;
       font-weight: 600;
+
+      @media (min-width: 480px) {
+        font-size: 1.4rem;
+      }
     }
 
     & > a {
