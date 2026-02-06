@@ -353,6 +353,8 @@ body:not([data-isLoggedIn='true']) {
     background-color: var(--color-surface);
     border-top-left-radius: var(--accordion-radius);
     border-top-right-radius: var(--accordion-radius);
+    border-bottom-left-radius: var(--accordion-radius);
+    border-bottom-right-radius: var(--accordion-radius);
     cursor: pointer;
   }
 
@@ -375,6 +377,14 @@ body:not([data-isLoggedIn='true']) {
 
   &:has(> input:is([type='radio'], [type='checkbox']):checked) {
     grid-template-rows: max-content 1fr;
+    border-bottom-left-radius: var(--accordion-radius);
+    border-bottom-right-radius: var(--accordion-radius);
+
+    & > .accordion-title,
+    & > input:is([type='radio'], [type='checkbox']) {
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+    }
 
     & > .accordion-content {
       content-visibility: visible;
