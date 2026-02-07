@@ -262,7 +262,8 @@ body:not([data-isLoggedIn='true']) {
     font-weight: 600;
   }
 
-  input {
+  input,
+  select {
     padding: 0.65rem 0.75rem;
     border-radius: 0.5rem;
     border: 1px solid var(--color-border);
@@ -280,9 +281,7 @@ body:not([data-isLoggedIn='true']) {
       border-color: var(--color-primary);
       box-shadow: 0 0 0 3px hsla(221, 83%, 53%, 0.15);
     }
-  }
 
-  input {
     & ~ p {
       color: var(--color-error);
       visibility: hidden;

@@ -43,3 +43,44 @@ function processAdminLogin(event) {
 
   setFormStatus('Invalid credentials');
 }
+
+function initCars() {
+  const carSelectEl = document.getElementById('bookingFilterCar');
+
+  if (!carSelectEl) {
+    return;
+  }
+
+  for (const car of carListing) {
+    const optionEl = document.createElement('option');
+    optionEl.value = car.id.toString();
+    optionEl.textContent = `${car.brand} ${car.model}`;
+    carSelectEl.appendChild(optionEl);
+  }
+}
+
+/**
+ *
+ * @param {Account[]} accounts
+ */
+function initAccounts(accounts) {
+  const customerSelectEl = document.getElementById('bookingFilterCust');
+
+  if (!customerSelectEl) {
+    return;
+  }
+
+  for (const account of accounts) {
+    const optionEl = document.createElement('option');
+    optionEl.value = account.id;
+    optionEl.textContent = account.name;
+    customerSelectEl.appendChild(optionEl);
+  }
+}
+
+initFromLocalStorage(function main(data) {
+  const { accounts } = data;
+
+  initCars();
+  initAccounts(accounts);
+});

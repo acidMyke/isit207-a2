@@ -131,8 +131,8 @@ const BOOKING_STATUS_CONST = {
 /**
  *
  * @param {string | string[]} status
- * @param {'error' | 'success'} type
- * @param {HTMLElement?} el
+ * @param {'error' | 'success'} [type]
+ * @param {HTMLElement?} [el]
  */
 function setFormStatus(status, type = 'error', el) {
   /** @type {HTMLDivElement | null} */
@@ -247,7 +247,10 @@ function processLogout(event) {
   redirectAfterLogin();
 }
 
-function initFromLocalStorage() {
+/**
+ * @param {((data: ReturnType<typeof saveToLocalStorage>) => void)} callback
+ */
+function initFromLocalStorage(callback) {
   const dynamicDataJson = localStorage.getItem('dynamicData');
   if (!dynamicDataJson) return;
   try {
@@ -275,10 +278,8 @@ function initFromLocalStorage() {
     ) {
       currentAccount = dynamicData.currentAccount;
     }
+    callback(saveToLocalStorage());
   } catch {}
-  renderCarGrid();
-  renderBookingHistory();
-  initializeCarCheckout();
   setInterval(() => saveToLocalStorage(), 20_000);
 }
 
@@ -339,7 +340,11 @@ class AppNavCompoenent extends HTMLElement {
   static authPath = ['login.html', 'sign-up.html'];
 
   connectedCallback() {
-    initFromLocalStorage();
+    initFromLocalStorage(() => {
+      renderCarGrid();
+      renderBookingHistory();
+      initializeCarCheckout();
+    });
     if (currentAccount) {
       const menuEl = this.shadowRoot?.getElementById('menu');
       menuEl?.setAttribute('data-isLoggedIn', 'true');

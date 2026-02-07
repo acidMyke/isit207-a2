@@ -1,8 +1,6 @@
-
 .nav {
   font-size: 2rem;
 }
-
 
 section.spaview:not(.spaactive) {
   display: none !important;
@@ -22,5 +20,17 @@ section.spaview:not(.spaactive) {
     font-size: 1.5rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
+  }
+}
+
+#bookingListView {
+  form {
+    display: flex;
+    flex-flow: row nowrap;
+    gap: 1rem;
+
+    .formfield {
+      width: 100%;
+    }
   }
 }

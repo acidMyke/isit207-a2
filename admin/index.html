@@ -32,12 +32,14 @@
     <header class="site-header">
       <nav class="nav">
         <strong>AZoom Admin</strong>
-        <button id="logoutbtn" class="btn-link hidden" onclick="logout()">Logout</button>
+        <button id="logoutbtn" class="btn-link hidden" onclick="logout()">
+          Logout
+        </button>
       </nav>
     </header>
 
     <main style="max-width: 1200px; margin: auto; padding: 1rem">
-      <section id="loginView" class="spaview spaactive">
+      <section id="loginView" class="spaview">
         <h1>Admin login</h1>
         <form
           style="display: grid; gap: 1.25rem"
@@ -45,12 +47,7 @@
         >
           <div class="formfield">
             <label for="username">Username</label>
-            <input
-              id="username"
-              name="username"
-              placeholder="you"
-              required
-            />
+            <input id="username" name="username" placeholder="you" required />
             <p>Required</p>
           </div>
 
@@ -72,8 +69,37 @@
           <button class="btn-action-gradient" type="submit">Sign in</button>
         </form>
       </section>
-      <section id="bookingListView" class="spaview">
-
+      <section id="bookingListView" class="spaview spaactive">
+        <form
+          onchange="onBookingListFilterChange(event)"
+          id="bookingFilter"
+        >
+          <div class="formfield">
+            <label for="bookingFilterCust">Customer</label>
+            <select id="bookingFilterCust" name="userId">
+              <option value="-1">None</option>
+              <!-- TODO: JS -->
+            </select>
+          </div>
+          <div class="formfield">
+            <label for="bookingFilterCar">Car</label>
+            <select id="bookingFilterCar" name="carId">
+              <option value="-1">None</option>
+              <!-- TODO: JS -->
+            </select>
+          </div>
+          <div class="formfield">
+            <label for="bookingFilterStatus">Status</label>
+            <select id="bookingFilterStatus" name="status" >
+              <option value="">None</option>
+              <option value="reserved">Reserved</option>
+              <option value="collected">Collected</option>
+              <option value="returned">Returned</option>
+              <option value="inspected">Inspected</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </form>
       </section>
     </main>
   </body>
