@@ -27,10 +27,10 @@
  * @property {string} dateTo
  * @property {string} last4cc
  * @property {number} total
- * @property {number?} penalty
- * @property {string[]} photos
  * @property {'reserved' | 'collected' | 'returned' | 'inspected'} status
  * @property {number} checkedOutAt
+ * @property {string?} comment
+ * @property {number?} penalty
  */
 
 const dateFormatter = Intl.DateTimeFormat('en-SG', {

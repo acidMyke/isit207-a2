@@ -189,7 +189,11 @@ function renderBookingCard(booking, addonElements) {
 }
 
 /**
- * @param {Booking} booking
+ * @typedef {Booking & {penaltyStr?: string}} ExtendedBookingForAdminUpdate
+ */
+
+/**
+ * @param {ExtendedBookingForAdminUpdate} booking
  * @param {boolean} triggerShowModal
  */
 function showUpdateBookingModel(booking, triggerShowModal) {
@@ -202,13 +206,17 @@ function showUpdateBookingModel(booking, triggerShowModal) {
   }
 
   /** @type {HTMLElement[]} */
-  const formElements = [updateStatusFormField(booking)];
+  const formElements = [
+    updateStatusFormField(booking),
+    updatePenaltyFormField(booking),
+    updateCommentFormField(booking),
+  ];
 
   if (booking.status === 'inspected') {
     const saveWarningDiv = document.createElement('div');
     saveWarningDiv.classList.add('formStatus');
     saveWarningDiv.innerHTML = `
-      <p class="warning">Saving as "Inspected" makes this booking read-only.</p>
+      <p class="warning">Saving as "Inspected" will finalized this booking and charged the customer</p>
     `;
     formElements.splice(1, 0, saveWarningDiv);
   }
@@ -230,7 +238,7 @@ function showUpdateBookingModel(booking, triggerShowModal) {
 }
 
 /**
- * @param {Booking} booking
+ * @param {ExtendedBookingForAdminUpdate} booking
  */
 function updateStatusFormField(booking) {
   const labelEl = document.createElement('label');
@@ -251,13 +259,57 @@ function updateStatusFormField(booking) {
   selectEl.onchange = () =>
     showUpdateBookingModel({ ...booking, status: selectEl.value }, false);
 
-  const selectedOption = selectEl.querySelector(
-    `option[value="${booking.status}"]`,
-  );
   const statusSelectField = document.createElement('div');
   statusSelectField.classList.add('formfield');
   statusSelectField.appendChild(labelEl);
   statusSelectField.appendChild(selectEl);
 
   return statusSelectField;
+}
+
+/**
+ * @param {ExtendedBookingForAdminUpdate} booking
+ */
+function updateCommentFormField(booking) {
+  const labelEl = document.createElement('label');
+  labelEl.setAttribute('for', 'updateCommet');
+  labelEl.textContent = 'Comment';
+
+  const commentEl = document.createElement('input');
+  commentEl.id = 'updateComment';
+  commentEl.name = 'comment';
+  commentEl.value = booking.comment ?? '';
+  commentEl.onchange = () =>
+    showUpdateBookingModel({ ...booking, comment: commentEl.value }, false);
+
+  const commentField = document.createElement('div');
+  commentField.classList.add('formfield');
+  commentField.appendChild(labelEl);
+  commentField.appendChild(commentEl);
+
+  return commentField;
+}
+
+/**
+ * @param {ExtendedBookingForAdminUpdate} booking
+ */
+function updatePenaltyFormField(booking) {
+  const labelEl = document.createElement('label');
+  labelEl.setAttribute('for', 'updatePenalty');
+  labelEl.textContent = 'Penalty';
+
+  const penaltyEl = document.createElement('input');
+  penaltyEl.id = 'updatePenalty';
+  penaltyEl.name = 'penalty';
+  penaltyEl.value = booking.penaltyStr ?? '0';
+  penaltyEl.type = 'number';
+  penaltyEl.onchange = () =>
+    showUpdateBookingModel({ ...booking, penaltyStr: penaltyEl.value }, false);
+
+  const penaltyField = document.createElement('div');
+  penaltyField.classList.add('formfield');
+  penaltyField.appendChild(labelEl);
+  penaltyField.appendChild(penaltyEl);
+
+  return penaltyField;
 }
