@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AZoom - Admin Bookings</title>
+    <link rel="stylesheet" href="/common.css" />
+    <link rel="stylesheet" href="/admin/index.css" />
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="/images/favicon-16x16.png"
+    />
+    <link rel="manifest" href="/site.webmanifest" />
+    <script defer src="/main.js"></script>
+    <script defer src="/admin/index.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <nav class="nav">
+        <strong>Admin</strong>
+        <button class="btn-link loginonly" onclick="logout()">Logout</button>
+      </nav>
+    </header>
+
+    <main style="max-width: 1200px; margin: auto; padding: 1rem">
+      <section id="loginView" class="spaview spaactive">
+        <h1>Admin login</h1>
+        <form
+          style="display: grid; gap: 1.25rem"
+          onsubmit="processAdminLogin(event)"
+        >
+          <div class="formfield">
+            <label for="namail">Name/Email</label>
+            <input
+              id="namail"
+              name="namail"
+              placeholder="you/you@example.com"
+              required
+            />
+            <p>Required</p>
+          </div>
+
+          <div class="formfield">
+            <label for="password">Password</label>
+            <input
+              id="password"
+              type="password"
+              name="password"
+              placeholder="••••••••"
+              required
+              minlength="8"
+            />
+            <p>Must be at least 8 characters</p>
+          </div>
+
+          <div class="formStatus"></div>
+
+          <button class="btn-action-gradient" type="submit">Sign in</button>
+        </form>
+      </section>
+    </main>
+  </body>
+</html>
