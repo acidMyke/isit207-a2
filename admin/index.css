@@ -76,12 +76,12 @@ section.spaview:not(.spaactive) {
   grid-auto-rows: 1fr;
   grid-template-columns: 1fr;
   min-height: 20rem;
-  grid-template-rows: repeat(11, 1fr);
+  grid-template-rows: repeat(12, 1fr);
   column-gap: 2rem;
 
   dialog & {
     grid-auto-flow: column;
-    grid-template-rows: repeat(9, 1fr);
+    grid-template-rows: repeat(10, 1fr);
   }
 
   & > p {
@@ -91,7 +91,7 @@ section.spaview:not(.spaactive) {
     }
   }
 
-  & > button {
+  & button {
     grid-row-end: span 2;
     font-size: 1.5rem;
   }
@@ -103,8 +103,11 @@ section.spaview:not(.spaactive) {
     display: grid;
     gap: 1rem;
     grid-auto-rows: min-content;
+    grid-template-columns: auto auto;
 
-
+    .formfield, .formStatus {
+      grid-column-end: span 2
+    }
   }
 
   border-bottom-left-radius: var(--border-radius);

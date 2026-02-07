@@ -128,11 +128,9 @@ function renderBookingList(event) {
     /** @type {HTMLElement[]} */
     const addonElements = [];
     if (booking.status !== 'inspected') {
-      const inspectButton = document.createElement('button');
-      inspectButton.classList.add('btn-primary');
-      inspectButton.onclick = () => showUpdateBookingModel(booking, true);
-      inspectButton.textContent = 'Update';
-      addonElements.push(inspectButton);
+      addonElements.push(
+        createButton('Update', () => showUpdateBookingModel(booking, true)),
+      );
     }
 
     const bookingCard = renderBookingCard(booking, addonElements);
@@ -174,7 +172,7 @@ function renderBookingCard(booking, addonElements) {
     <p>From: <strong>${dateFormatter.format(new Date(booking.dateTimeFrom))}</strong></p>
     <p>To: <strong>${dateFormatter.format(new Date(booking.dateTo))}</strong></p>
     <p>Total: <strong>${currencyFormatter.format(booking.total)}</strong></p>
-    ${booking.penalty ? `<p>Penalty: ${currencyFormatter.format(booking.penalty)}</p>` : ''}
+    <p>Penalty: <strong>${currencyFormatter.format(booking.penalty ?? 0)}</strong></p>
   </div>`;
 
   let contentEl = card.querySelector('.card-content');
@@ -210,6 +208,11 @@ function showUpdateBookingModel(booking, triggerShowModal) {
     updateStatusFormField(booking),
     updatePenaltyFormField(booking),
     updateCommentFormField(booking),
+    createButton('Save', () => {
+      saveUpdateBooking(booking);
+      dialogEl.close();
+    }),
+    createButton('Cancel', () => dialogEl.close(), 'btn-link'),
   ];
 
   if (booking.status === 'inspected') {
@@ -222,6 +225,7 @@ function showUpdateBookingModel(booking, triggerShowModal) {
   }
 
   let updateFormEl = document.createElement('form');
+  updateFormEl.onsubmit = event => event.preventDefault();
   formElements.forEach(el => updateFormEl.appendChild(el));
 
   const cardEl = renderBookingCard(booking, [updateFormEl]);
@@ -301,7 +305,7 @@ function updatePenaltyFormField(booking) {
   const penaltyEl = document.createElement('input');
   penaltyEl.id = 'updatePenalty';
   penaltyEl.name = 'penalty';
-  penaltyEl.value = booking.penaltyStr ?? '0';
+  penaltyEl.value = booking.penaltyStr ?? booking.penalty?.toString() ?? '0';
   penaltyEl.type = 'number';
   penaltyEl.onchange = () =>
     showUpdateBookingModel({ ...booking, penaltyStr: penaltyEl.value }, false);
@@ -312,4 +316,38 @@ function updatePenaltyFormField(booking) {
   penaltyField.appendChild(penaltyEl);
 
   return penaltyField;
+}
+
+/**
+ * @param {string | null} label
+ * @param {() => any} onclick
+ */
+function createButton(label, onclick, className = 'btn-primary') {
+  const buttonEl = document.createElement('button');
+  buttonEl.classList.add(className);
+  buttonEl.onclick = () => onclick();
+  buttonEl.textContent = label;
+  buttonEl.type = 'button';
+  return buttonEl;
+}
+
+/**
+ * @param {ExtendedBookingForAdminUpdate} bookingForUpdate
+ */
+function saveUpdateBooking(bookingForUpdate) {
+  const { penaltyStr, ...booking } = bookingForUpdate;
+  if (penaltyStr) {
+    const penalty = parseFloat(penaltyStr);
+    if (!isNaN(penalty) && penalty > 0) {
+      booking.penalty = penalty;
+    }
+  }
+
+  const indexToUpdate = bookings.findIndex(({ id }) => id === booking.id);
+  if (indexToUpdate > -1) {
+    bookings.splice(indexToUpdate, 1, booking);
+  }
+
+  saveToLocalStorage();
+  renderBookingList();
 }
