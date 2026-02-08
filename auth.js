@@ -79,14 +79,3 @@ function processSignUp(event) {
   setCurrentAccount(acc);
   redirectAfterLogin();
 }
-
-/**
- *
- * @param {MouseEvent} event
- */
-function processLogout(event) {
-  event.preventDefault();
-  currentAccount = null;
-  saveToLocalStorage();
-  redirectAfterLogin();
-}

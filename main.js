@@ -350,3 +350,14 @@ class AppNavCompoenent extends HTMLElement {
 }
 
 customElements.define('app-nav', AppNavCompoenent);
+
+/**
+ *
+ * @param {MouseEvent} event
+ */
+function processLogout(event) {
+  event.preventDefault();
+  currentAccount = null;
+  saveToLocalStorage();
+  redirectAfterLogin();
+}
