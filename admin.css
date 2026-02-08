@@ -33,13 +33,15 @@ section.spaview:not(.spaactive) {
       width: 100%;
     }
   }
+  
+  margin: 0px auto;
 }
 
 #bookingListResult {
   margin-top: 2rem;
   display: grid;
   grid-auto-flow: row;
-  grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
 
   grid-auto-rows: 1fr;
   gap: 1.25rem;
@@ -52,6 +54,8 @@ section.spaview:not(.spaactive) {
     min-width: 12rem;
     width: 100%;
     box-shadow: 0 10px 30px hsla(221, 83%, 20%, 0.08);
+    max-width: 24rem;
+    
   }
 }
 
@@ -71,29 +75,36 @@ section.spaview:not(.spaactive) {
 .card-content {
   margin-top: 0.5rem;
   display: grid;
-  font-size: 1.4rem;
   width: fit-content;
-  grid-auto-rows: 1fr;
-  grid-template-columns: 1fr;
-  min-height: 20rem;
-  grid-template-rows: repeat(12, 1fr);
+  grid-auto-rows: auto;
+  grid-template-columns: 12rem;
+  grid-template-rows: repeat(12, auto);
   column-gap: 2rem;
+  font-size: 1rem;
+
+  @media (min-width: 720px) {
+    font-size: 1.4rem;
+  }
 
   dialog & {
     grid-auto-flow: column;
-    grid-template-rows: repeat(10, 1fr);
+    grid-template-rows: repeat(10, auto);
   }
 
   & > p {
-    white-space: nowrap;
     &:is(:first-child, :nth-child(2)) > strong {
       text-transform: capitalize;
     }
+    text-overflow: ellipsis;
   }
 
   & button {
     grid-row-end: span 2;
-    font-size: 1.5rem;
+    font-size: 1.1rem;
+
+    @media (min-width: 720px) {
+      font-size: 1.4rem;
+    }
   }
 
   & > form {
@@ -105,8 +116,9 @@ section.spaview:not(.spaactive) {
     grid-auto-rows: min-content;
     grid-template-columns: auto auto;
 
-    .formfield, .formStatus {
-      grid-column-end: span 2
+    .formfield,
+    .formStatus {
+      grid-column-end: span 2;
     }
   }
 
