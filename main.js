@@ -317,20 +317,21 @@ class AppNavCompoenent extends HTMLElement {
   static authPath = ['login.html', 'sign-up.html'];
 
   connectedCallback() {
-    initFromLocalStorage(() => {});
+    initFromLocalStorage();
     if (currentAccount) {
       const menuEl = this.shadowRoot?.getElementById('menu');
       menuEl?.setAttribute('data-isLoggedIn', 'true');
       document.body.setAttribute('data-isLoggedIn', 'true');
     }
-    const currentPath =
-      window.location.pathname.split('/').pop() || 'index.html';
+    const currentPath = (
+      window.location.pathname.split('/').pop() || 'index.html'
+    ).replace('.html', '');
 
     const links = this.shadowRoot?.querySelectorAll('li > a');
 
     links?.forEach(link => {
       const li = link.parentElement;
-      const linkPath = link.getAttribute('href');
+      const linkPath = link.getAttribute('href')?.replace('.html', '');
 
       li?.classList.toggle('active', linkPath === currentPath);
 
