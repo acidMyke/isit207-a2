@@ -278,7 +278,7 @@ class AppNavCompoenent extends HTMLElement {
           <li><a href="about.html">About Us</a></li>
           <li class="publiconly"><a href="login.html">Login</a></li>
           <li class="publiconly"><a href="sign-up.html">Sign Up</a></li>
-          <li class="loginonly"><a href="booking.html">Booking</a></li>
+          <li class="loginonly"><a href="reserve.html">Reserve</a></li>
           <li class="loginonly"><a href="history.html">History</a></li>
           <li class="loginonly"><a href="#" onclick="processLogout(event)">Log out</a></li>
         </ul>
@@ -290,7 +290,6 @@ class AppNavCompoenent extends HTMLElement {
 
   connectedCallback() {
     initFromLocalStorage(() => {
-      renderCarGrid();
       renderBookingHistory();
     });
     if (currentAccount) {
@@ -324,26 +323,6 @@ class AppNavCompoenent extends HTMLElement {
 }
 
 customElements.define('app-nav', AppNavCompoenent);
-
-function renderCarGrid() {
-  const carGrid = document.getElementById('car-grid');
-  if (!carGrid) {
-    return;
-  }
-  carGrid.innerHTML = '';
-  for (let car of carListing) {
-    const carOptionEl = document.createElement('div');
-    const { id, brand, imagePath, model, price } = car;
-    const qty = carQty[id.toString().padStart(2, '0')];
-    carOptionEl.innerHTML = `
-      <img src="${imagePath}" alt="${brand} ${model}">
-      <h3>${brand} ${model}</h3>
-      <p>SGD ${price} per day</p>
-      <a class="btn-primary" href="/checkout.html?carid=${id}">Select!</a>`;
-    carOptionEl.setAttribute('data-qty', qty.toString());
-    carGrid?.appendChild(carOptionEl);
-  }
-}
 
 function renderBookingHistory() {
   const historyListEl = document.getElementById('history-list');

@@ -8,7 +8,7 @@ function initializeCarCheckout() {
   const params = new URLSearchParams(location.search);
   const caridStr = params.get('carid');
   if (!caridStr) {
-    location.href = '/booking.html';
+    location.href = '/reserve.html';
     return;
   }
 
