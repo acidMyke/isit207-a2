@@ -55,16 +55,17 @@ section.spaview:not(.spaactive) {
     width: 100%;
     box-shadow: 0 10px 30px hsla(221, 83%, 20%, 0.08);
     max-width: 24rem;
-    
   }
 }
 
 .card-title {
-  font-size: 1.6rem;
+  font-size: 1.2rem;
   font-weight: 600;
   @media (min-width: 720px) {
-    font-size: 2rem;
+    font-size: 1.6rem;
   }
+  display: flex;
+  justify-content: space-between;
 
   border-top-left-radius: var(--border-radius);
   border-top-right-radius: var(--border-radius);
@@ -124,4 +125,8 @@ section.spaview:not(.spaactive) {
 
   border-bottom-left-radius: var(--border-radius);
   border-bottom-right-radius: var(--border-radius);
+}
+
+#updateBookingDialog {
+  width: 48rem;
 }

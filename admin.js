@@ -179,9 +179,9 @@ function renderBookingCard(booking, addonElements) {
   card.innerHTML = `
   <div class="card-title">
     <span>Booking ${booking.id}</span>
+    <span>${BOOKING_STATUS_CONST[booking.status].label}</span>
   </div>
   <div class="card-content">
-    <p>Status: <strong>${booking.status}</strong></p>
     <p>Customer: <strong>${user.name}</strong></p>
     <p>Car: <strong>${car.brand} ${car.model}</strong></p>
     <p>Checkout at:</p>
@@ -189,7 +189,7 @@ function renderBookingCard(booking, addonElements) {
     <p class="indent"><strong>${timeFormatter.format(new Date(booking.checkedOutAt))}</strong></p>
     <p>From: <strong>${dateFormatter.format(new Date(booking.dateTimeFrom))}</strong></p>
     <p>To: <strong>${dateFormatter.format(new Date(booking.dateTo))}</strong></p>
-    <p>Total: <strong>${currencyFormatter.format(booking.total)}</strong></p>
+    <p>Subtotal: <strong>${currencyFormatter.format(booking.status === 'refunded' ? 0 : booking.total)}</strong></p>
     <p>Penalty: <strong>${currencyFormatter.format(booking.penalty ?? 0)}</strong></p>
   </div>`;
 
@@ -199,6 +199,13 @@ function renderBookingCard(booking, addonElements) {
     for (const el of addonElements) {
       contentEl?.appendChild(el);
     }
+  }
+
+  if (booking.status) {
+    const finalizedTotalEl = document.createElement('h2');
+    finalizedTotalEl.textContent = `Total: ${currencyFormatter.format(booking.total + (booking.penalty ?? 0))}`;
+
+    contentEl?.appendChild(finalizedTotalEl);
   }
 
   return card;
@@ -246,7 +253,7 @@ function showUpdateBookingModel(booking, triggerShowModal) {
     const saveWarningDiv = document.createElement('div');
     saveWarningDiv.classList.add('formStatus');
     saveWarningDiv.innerHTML = `
-      <p class="warning">Saving as "Refunded" will finalized this booking and refund the customer</p>
+      <p class="warning">Saving as "Refunded" will finalized this booking and refund the total (less penalty) the customer</p>
     `;
     formElements.splice(1, 0, saveWarningDiv);
   }
@@ -383,6 +390,10 @@ function saveUpdateBooking(bookingForUpdate) {
     if (!isNaN(penalty) && penalty > 0) {
       booking.penalty = penalty;
     }
+  }
+
+  if (booking.status === 'refunded') {
+    booking.total = 0;
   }
 
   const indexToUpdate = bookings.findIndex(({ id }) => id === booking.id);
