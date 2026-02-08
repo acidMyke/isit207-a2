@@ -16,7 +16,7 @@ main {
 }
 
 .accordion-title {
-  font-size: 1.2rem;
+  font-size: 1.4rem;
   @media (min-width: 720px) {
     font-size: 2rem;
   }

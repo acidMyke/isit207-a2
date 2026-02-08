@@ -33,7 +33,7 @@ section.spaview:not(.spaactive) {
       width: 100%;
     }
   }
-  
+
   margin: 0px auto;
 }
 
@@ -76,9 +76,9 @@ section.spaview:not(.spaactive) {
 .card-content {
   margin-top: 0.5rem;
   display: grid;
-  width: fit-content;
+  width: 100%;
   grid-auto-rows: auto;
-  grid-template-columns: 12rem;
+  grid-template-columns: auto;
   grid-template-rows: repeat(12, auto);
   column-gap: 2rem;
   font-size: 1rem;
@@ -97,6 +97,11 @@ section.spaview:not(.spaactive) {
       text-transform: capitalize;
     }
     text-overflow: ellipsis;
+  }
+
+  & > h2 {
+    width: 100%;
+    grid-row-start: -1;
   }
 
   & button {
@@ -120,7 +125,10 @@ section.spaview:not(.spaactive) {
     .formfield,
     .formStatus {
       grid-column-end: span 2;
+      width: 100%;
     }
+
+    width: 100%;
   }
 
   border-bottom-left-radius: var(--border-radius);

@@ -151,13 +151,20 @@ function renderBookingList(event) {
       addonElements.push(
         createButton('Update', () => showUpdateBookingModel(booking, true)),
       );
-    } else if (booking.comment) {
-      const strongEl = document.createElement('strong');
-      strongEl.textContent = booking.comment;
-      const commentEl = document.createElement('p');
-      commentEl.textContent = 'Comment: ';
-      commentEl.appendChild(strongEl);
-      addonElements.push(commentEl);
+    } else {
+      if (booking.comment) {
+        const strongEl = document.createElement('strong');
+        strongEl.textContent = booking.comment;
+        const commentEl = document.createElement('p');
+        commentEl.textContent = 'Comment: ';
+        commentEl.appendChild(strongEl);
+        addonElements.push(commentEl);
+      }
+      if (booking.status === 'refunded' || booking.status === 'inspected') {
+        const finalizedTotalEl = document.createElement('h2');
+        finalizedTotalEl.textContent = `Total: ${currencyFormatter.format(booking.total + (booking.penalty ?? 0))}`;
+        addonElements.push(finalizedTotalEl);
+      }
     }
 
     const bookingCard = renderBookingCard(booking, addonElements);
@@ -176,8 +183,9 @@ function renderBookingList(event) {
 function renderBookingCard(booking, addonElements) {
   const car = carListing.find(({ id }) => id === booking.carId);
   const user = accounts.find(({ id }) => id === booking.userId);
+  const place = OFFICE_PLACES.find(({ id }) => id === booking.placeId);
 
-  if (!car || !user) {
+  if (!car || !user || !place) {
     return null;
   }
 
@@ -193,6 +201,7 @@ function renderBookingCard(booking, addonElements) {
   <div class="card-content">
     <p>Customer: <strong>${user.name}</strong></p>
     <p>Car: <strong>${car.brand} ${car.model}</strong></p>
+    <p>Branch: <strong>${place.name}</strong></p>
     <p>Checkout at:</p>
     <p class="indent"><strong>${dateFormatter.format(new Date(booking.checkedOutAt))}</strong></p>
     <p class="indent"><strong>${timeFormatter.format(new Date(booking.checkedOutAt))}</strong></p>
@@ -208,13 +217,6 @@ function renderBookingCard(booking, addonElements) {
     for (const el of addonElements) {
       contentEl?.appendChild(el);
     }
-  }
-
-  if (booking.status) {
-    const finalizedTotalEl = document.createElement('h2');
-    finalizedTotalEl.textContent = `Total: ${currencyFormatter.format(booking.total + (booking.penalty ?? 0))}`;
-
-    contentEl?.appendChild(finalizedTotalEl);
   }
 
   return card;
