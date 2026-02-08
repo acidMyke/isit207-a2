@@ -56,42 +56,42 @@ let carListing = [
     id: 0,
     brand: 'BMW',
     model: '3 Series',
-    price: 333,
+    price: 120,
     imagePath: 'images/cars/00-3series.webp',
   },
   {
     id: 1,
     brand: 'Audi',
     model: 'A4',
-    price: 200,
+    price: 110,
     imagePath: 'images/cars/01-a4.webp',
   },
   {
     id: 2,
     brand: 'Mercedes',
     model: 'GLA',
-    price: 280,
+    price: 130,
     imagePath: 'images/cars/02-m-gla.avif',
   },
   {
     id: 3,
     brand: 'Mercedes',
     model: 'E Class',
-    price: 280,
+    price: 160,
     imagePath: 'images/cars/03-m-eclass.webp',
   },
   {
     id: 4,
     brand: 'Mercedes',
     model: 'GLC',
-    price: 280,
+    price: 150,
     imagePath: 'images/cars/04-m-glc.webp',
   },
   {
     id: 5,
     brand: 'Mercedes',
     model: 'GLE',
-    price: 280,
+    price: 190,
     imagePath: 'images/cars/05-m-gle.avif',
   },
 ];
@@ -272,34 +272,35 @@ function processLogout(event) {
  */
 function initFromLocalStorage(callback) {
   const dynamicDataJson = localStorage.getItem('dynamicData');
-  if (!dynamicDataJson) return;
-  try {
-    /** @type {ReturnType<typeof saveToLocalStorage>} */
-    const dynamicData = JSON.parse(dynamicDataJson);
-    accounts = dynamicData.accounts;
-    if (dynamicData.carQty) {
-      for (const key in dynamicData.carQty) {
-        carQty[key] = dynamicData.carQty[key];
+  if (dynamicDataJson) {
+    try {
+      /** @type {ReturnType<typeof saveToLocalStorage>} */
+      const dynamicData = JSON.parse(dynamicDataJson);
+      accounts = dynamicData.accounts;
+      if (dynamicData.carQty) {
+        for (const key in dynamicData.carQty) {
+          carQty[key] = dynamicData.carQty[key];
+        }
       }
-    }
 
-    if (
-      dynamicData.bookings &&
-      Array.isArray(dynamicData.bookings) &&
-      dynamicData.bookings.length
-    ) {
-      bookings = dynamicData.bookings;
-    }
+      if (
+        dynamicData.bookings &&
+        Array.isArray(dynamicData.bookings) &&
+        dynamicData.bookings.length
+      ) {
+        bookings = dynamicData.bookings;
+      }
 
-    if (
-      dynamicData.currentAccount &&
-      dynamicData.currentAccount.loginMs &&
-      dynamicData.currentAccount.loginMs + 600_000 > new Date().getTime()
-    ) {
-      currentAccount = dynamicData.currentAccount;
-    }
-    callback(saveToLocalStorage());
-  } catch {}
+      if (
+        dynamicData.currentAccount &&
+        dynamicData.currentAccount.loginMs &&
+        dynamicData.currentAccount.loginMs + 600_000 > new Date().getTime()
+      ) {
+        currentAccount = dynamicData.currentAccount;
+      }
+    } catch {}
+  }
+  callback(saveToLocalStorage());
   setInterval(() => saveToLocalStorage(), 20_000);
 }
 

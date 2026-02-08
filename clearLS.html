@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Clear LocalStorage</title>
+    <script>
+      function clearLocalStorage() {
+        localStorage.clear();
+        alert('localStorage cleared!');
+        location.replace('/index.html');
+      }
+    </script>
+  </head>
+  <body>
+    <button id="clearStorageBtn" onclick="clearLocalStorage()">
+      Clear localStorage
+    </button>
+  </body>
+</html>
