@@ -1,3 +1,5 @@
+//@ts-check
+
 function renderBookingHistory() {
   const historyListEl = document.getElementById('history-list');
   if (!historyListEl) {
@@ -65,6 +67,13 @@ function renderBookingAccordion(booking, index) {
   </div>`;
 
   let contentEl = accordion.querySelector('.accordion-content');
+
+  if (booking.status === 'reserved' || booking.status === 'collected') {
+    const label = booking.status === 'reserved' ? 'Pickup at ' : 'Return to ';
+    const linkEl = getGoogleMapsLinkElement(booking.placeId, label);
+    linkEl && contentEl?.appendChild(linkEl);
+  }
+
   let primaryButtonEl = document.createElement('button');
   primaryButtonEl.classList.add('btn-primary');
   let linkButtonEl = document.createElement('button');
@@ -88,6 +97,23 @@ function renderBookingAccordion(booking, index) {
   }
 
   return accordion;
+}
+
+/**
+ * @param {string} placeId
+ * @param {string} label
+ */
+function getGoogleMapsLinkElement(placeId, label) {
+  const place = OFFICE_PLACES.find(p => p.id === placeId);
+  if (!place) {
+    return null;
+  }
+  const linkEl = document.createElement('a');
+  linkEl.href = `https://www.google.com/maps/dir/?api=1&destination=${place.latitude},${place.longitude}`;
+  linkEl.target = '_blank';
+  linkEl.rel = 'noopener noreferrer';
+  linkEl.textContent = label + place.name;
+  return linkEl;
 }
 
 /**
